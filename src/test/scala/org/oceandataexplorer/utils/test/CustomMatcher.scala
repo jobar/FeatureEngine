@@ -33,9 +33,9 @@ trait CustomMatchers {
     def apply(actual: Array[Double]) = {
       val rmse = ErrorMetrics.rmse(actual, expected)
       MatchResult(
-        ErrorMetrics.rmse(actual, expected) < 1.0E-10,
-        s"""The arrays did not rmse-match ($rmse > $maxRMSE)"""",
-        s"""The arrays did rmse-match (with rmse of $rmse)""""
+        ErrorMetrics.rmse(actual, expected) < maxRMSE,
+        s"The arrays did not rmse-match ($rmse > $maxRMSE)",
+        s"The arrays did rmse-match (with rmse of $rmse)"
       )
     }
   }

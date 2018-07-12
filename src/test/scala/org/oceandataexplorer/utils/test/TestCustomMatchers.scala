@@ -29,14 +29,14 @@ class TestCustomMatchers extends FlatSpec with Matchers with CustomMatchers {
   val maxRMSE = 1.0E-10
   val rmseMatch = rmseMatcher(maxRMSE)
 
-  "ErrorMetrics" should "compute the rmse for two sequences" in {
-    val seqA = Array(
+  "rmseMatcher" should "should find match when given the same array" in {
+    val data = Array(
       0.1221174368357885, 0.8030612655311997, 0.8732426284336273,
       0.8000925604778708, 0.6351656368136573, 0.323284190497698 ,
       0.6192489942098376, 0.9573403084388671, 0.7101131243855894,
       0.0232360227774637
     )
 
-    seqA should rmseMatch(seqA)
+    data should rmseMatch(data)
   }
 }
