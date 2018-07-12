@@ -26,6 +26,9 @@ import org.scalatest.{FlatSpec, Matchers}
  */
 class TestCustomMatchers extends FlatSpec with Matchers with CustomMatchers {
 
+  val maxRMSE = 1.0E-10
+  val rmseMatch = rmseMatcher(maxRMSE)
+
   "ErrorMetrics" should "compute the rmse for two sequences" in {
     val seqA = Array(
       0.1221174368357885, 0.8030612655311997, 0.8732426284336273,

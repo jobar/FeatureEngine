@@ -28,11 +28,10 @@ import matchers._
 
 trait CustomMatchers {
 
-  class ArrayRMSEMatch(expected: Array[Double]) extends Matcher[Array[Double]] {
+  class ArrayRMSEMatch(maxRMSE: Double, expected: Array[Double]) extends Matcher[Array[Double]] {
 
     def apply(actual: Array[Double]) = {
       val rmse = ErrorMetrics.rmse(actual, expected)
-      val maxRMSE = 1.0E-10
       MatchResult(
         ErrorMetrics.rmse(actual, expected) < 1.0E-10,
         s"""The arrays did not rmse-match ($rmse > $maxRMSE)"""",
@@ -41,5 +40,6 @@ trait CustomMatchers {
     }
   }
 
-  def rmseMatch(expected: Array[Double]) = new ArrayRMSEMatch(expected)
+  private def rmseMatch(maxRMSE: Double)(expected: Array[Double]) = new ArrayRMSEMatch(maxRMSE, expected)
+  def rmseMatcher(maxRMSE: Double) = rmseMatch(maxRMSE)(_)
 }
