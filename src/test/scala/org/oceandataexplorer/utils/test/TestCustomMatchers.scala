@@ -24,7 +24,7 @@ import org.scalatest.{FlatSpec, Matchers}
  *
  * @author Alexandre Degurse
  */
-class TestCustomMatchers extends FlatSpec with Matchers with CustomMatchers {
+class TestRmseMatchers extends FlatSpec with Matchers with RmseMatchers {
 
   val maxRMSE = 1.0E-10
   val rmseMatch = rmseMatcher(maxRMSE)

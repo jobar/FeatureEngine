@@ -29,31 +29,15 @@ import matchers._
 
 trait RmseMatchers {
   class RmseMatcher[T](maxRMSE: Double, expected: T) extends Matcher[T] {
-    def apply(actual: T) = {
-      val rmse = (actual, expected) match {
-        case _: (Double, Double) =>
-          ErrorMetrics.rmse(
-            actual.asInstanceOf[Double],
-            expected.asInstanceOf[Double]
-          )
-        case _: (Array[Double], Array[Double]) =>
-          ErrorMetrics.rmse(
-            actual.asInstanceOf[Array[Double]],
-            expected.asInstanceOf[Array[Double]]
-          )
-        case _: (Array[SegmentedRecord], Array[SegmentedRecord]) =>
-          ErrorMetrics.rmse(
-            actual.asInstanceOf[Array[SegmentedRecord]],
-            expected.asInstanceOf[Array[SegmentedRecord]]
-          )
-        case _: (Array[AggregatedRecord], Array[AggregatedRecord]) =>
-          ErrorMetrics.rmse(
-            actual.asInstanceOf[Array[AggregatedRecord]],
-            expected.asInstanceOf[Array[AggregatedRecord]]
-          )
-        case _ => throw new IllegalArgumentException("Wrong argument types for RmseMatcher")
-      }
+    def apply(actual: T): MatchResult
+  }
 
+  implicit def rmseArrayMatcher(maxRMSE: Double, expected: Array[Double]): RmseMatcher[Array[Double]](maxRMSE, expected) = new RmseMatcher[Array[Double]] {
+    def apply(actual: Array[Double]): MatchResult = {
+      val rmse = ErrorMetrics.rmse(
+        actual.asInstanceOf[Array[Double]],
+        expected.asInstanceOf[Array[Double]]
+      )
 
       MatchResult(
         rmse < maxRMSE,
@@ -63,6 +47,8 @@ trait RmseMatchers {
     }
   }
 
-  private def rmseMatch[T](maxRMSE: Double)(expected: T) = new RmseMatcher[T](maxRMSE, expected)
-  def rmseMatcher[T](maxRMSE: Double) = rmseMatch[T](maxRMSE)(_)
+
+  def rmseMatch[T](maxRMSE: Double, expected: T)(implicit instancier: ) = new RmseMatcher[T](maxRMSE, expected)
+
+  // def rmseMatcher[T](maxRMSE: Double) = rmseMatch[T](maxRMSE)(_)
 }
