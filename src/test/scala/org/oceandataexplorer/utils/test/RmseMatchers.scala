@@ -28,11 +28,11 @@ import matchers._
  */
 
 trait RmseMatchers {
-  class RmseMatcher[T](maxRMSE: Double, expected: T) extends Matcher[T] {
+  abstract class RmseMatcher[T](maxRMSE: Double, expected: T) extends Matcher[T] {
     def apply(actual: T): MatchResult
   }
 
-  implicit def rmseArrayMatcher(maxRMSE: Double, expected: Array[Double]): RmseMatcher[Array[Double]](maxRMSE, expected) = new RmseMatcher[Array[Double]] {
+  implicit def rmseArrayMatcher(maxRMSE: Double, expected: Array[Double]): RmseMatcher[Array[Double]]= new RmseMatcher[Array[Double]](maxRMSE, expected) {
     def apply(actual: Array[Double]): MatchResult = {
       val rmse = ErrorMetrics.rmse(
         actual.asInstanceOf[Array[Double]],
@@ -47,8 +47,20 @@ trait RmseMatchers {
     }
   }
 
+  implicit def rmseDoubleMatcher(maxRMSE: Double, expected: Double): RmseMatcher[Double]= new RmseMatcher[Double](maxRMSE, expected) {
+    def apply(actual: Double): MatchResult = {
+      val rmse = ErrorMetrics.rmse(
+        actual.asInstanceOf[Double],
+        expected.asInstanceOf[Double]
+      )
 
-  def rmseMatch[T](maxRMSE: Double, expected: T)(implicit instancier: ) = new RmseMatcher[T](maxRMSE, expected)
+      MatchResult(
+        rmse < maxRMSE,
+        s"The arrays did not rmse-match ($rmse > $maxRMSE)",
+        s"The arrays did rmse-match (with rmse of $rmse)"
+      )
+    }
+  }
 
-  // def rmseMatcher[T](maxRMSE: Double) = rmseMatch[T](maxRMSE)(_)
+  def rmseMatch[T](maxRMSE: Double, expected: T)(implicit instancier: (Double, T) => RmseMatcher[T]) = instancier(maxRMSE, expected)
 }
