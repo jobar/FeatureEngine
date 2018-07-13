@@ -16,7 +16,7 @@
 
 package org.oceandataexplorer.utils.test
 
-import org.oceandataexplorer.engine.workflows.{SegmentedRecord, AggregatedRecord}
+import org.oceandataexplorer.engine.workflows.{AggregatedRecord, SegmentedRecord}
 
 /**
  * Metric error functions
