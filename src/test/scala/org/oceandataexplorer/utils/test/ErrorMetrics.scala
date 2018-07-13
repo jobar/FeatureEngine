@@ -33,7 +33,7 @@ object ErrorMetrics {
    * @param actual The actual value
    * @return The root-mean-square deviation of the doubles
    */
-  def rmse(expected: Double, actual: Double): Double = {
+  implicit def rmse(expected: Double, actual: Double): Double = {
     math.sqrt(math.pow(expected - actual,2) / 2)
   }
 
@@ -45,7 +45,7 @@ object ErrorMetrics {
    * @param actual The sequence of actual values
    * @return The root-mean-square deviation of the sequences
    */
-  def rmse(expected: Seq[Double], actual: Seq[Double]): Double = {
+  implicit def rmse(expected: Array[Double], actual: Array[Double]): Double = {
     if (expected.length != actual.length) {
       throw new IllegalArgumentException("The given sequences' sizes don't match")
     }
@@ -53,6 +53,11 @@ object ErrorMetrics {
     val errs = expected.zip(actual).map { case (v1, v2) => math.pow(v1 - v2, 2) }
     val mse = errs.sum / errs.length
     math.sqrt(mse)
+  }
+
+  //TODO: Change tests so that only the previous is used, and remove this one.
+  implicit def rmse(expected: Seq[Double], actual: Seq[Double]): Double = {
+    rmse(expected.toArray, actual.toArray)
   }
 
   /**
@@ -63,7 +68,7 @@ object ErrorMetrics {
    * @param actual The actual Record
    * @return The root-mean-square deviation of the records
    */
-  def rmse(expected: => Array[SegmentedRecord], actual: => Array[SegmentedRecord]): Double = {
+  implicit def rmse(expected: => Array[SegmentedRecord], actual: => Array[SegmentedRecord]): Double = {
     if (expected.length != actual.length) {
       throw new IllegalArgumentException("The given sequences' sizes don't match")
     }
@@ -118,7 +123,7 @@ object ErrorMetrics {
    * @param actual The actual AggregatedRecord
    * @return The root-mean-square deviation of the AggregatedRecords.
    */
-  def rmse(expected: Array[AggregatedRecord], actual: Array[AggregatedRecord]): Double = {
+  implicit def rmse(expected: Array[AggregatedRecord], actual: Array[AggregatedRecord]): Double = {
     if (expected.length != actual.length) {
       throw new IllegalArgumentException("The given sequences' sizes don't match")
     }

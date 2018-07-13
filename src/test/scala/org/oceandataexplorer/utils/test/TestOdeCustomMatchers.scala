@@ -20,12 +20,14 @@ import org.scalatest.{FlatSpec, Matchers}
 
 
 /**
- * Tests for CustomMatchers
+ * Tests for OdeCustomMatchers
  *
  * @author Alexandre Degurse
  */
-class TestRmseMatchers extends FlatSpec with Matchers with RmseMatchers {
+class TestOdeCustomMatchers extends FlatSpec with Matchers with OdeCustomMatchers {
 
+  // Import ErrorMetrics._ for implicits rmse functions
+  import ErrorMetrics._
   val maxRMSE = 1.0E-10
 
   "rmseMatcher" should "should find match when given the same array" in {
@@ -36,12 +38,6 @@ class TestRmseMatchers extends FlatSpec with Matchers with RmseMatchers {
       0.0232360227774637
     )
 
-    data should rmseMatch(maxRMSE, data)
-  }
-
-  "rmseMatcher" should "should find match when given the same double" in {
-    val data = 0.5
-
-    data should rmseMatch(maxRMSE, data)
+    data should new RmseMatcher[Array[Double]](maxRMSE, data)
   }
 }
