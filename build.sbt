@@ -33,7 +33,7 @@ javaOptions ++= Seq(
 )
 
 resolvers += "Ode hadoop-io-extensions Repository" at "https://github.com/Project-ODE/hadoop-io-extensions/raw/repository"
-resolvers += "Boundless Repository" at "http://repo.boundlessgeo.com/main/"
+//resolvers += "Boundless Repository" at "http://repo.boundlessgeo.com/main/"
 
 // Explicitly get scala version and don't show warnings
 // https://mvnrepository.com/artifact/org.scala-lang/scala-library
@@ -71,4 +71,4 @@ libraryDependencies += "org.oceandataexplorer" % "hadoop-io-extensions" % "0.4"
 libraryDependencies += "com.github.nscala-time" %% "nscala-time" % "2.20.0"
 // https://mvnrepository.com/artifact/edu.ucar/cdm
 // hosted on Boundless Repository
-libraryDependencies += "edu.ucar" % "cdm" % "4.6.11"
+//libraryDependencies += "edu.ucar" % "cdm" % "4.6.11"
